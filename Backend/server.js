@@ -15,7 +15,8 @@ mongoose.connect('mongodb+srv://bhouvana:FO5KzR5350F6kKPN@cluster0.0equbxr.mongo
   });
   const express = require('express');
 const app = express();
-const port = process.env.PUBLIC_PORT || 3000; 
+const port = process.
+env.PUBLIC_PORT || 3000; 
 
 app.get('/ping', (req, res) => {
   res.json({ message: 'pong' });
