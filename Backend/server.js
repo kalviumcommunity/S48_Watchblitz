@@ -47,7 +47,7 @@ const watchlistSchema = Joi.object({
     brand: Joi.string().required(),
     price: Joi.number().required(),
     description: Joi.string().required(),
-    features: Joi.array().items(Joi.string()).required()
+    features: Joi.string().required()
 });
 
 app.post('/addWatchlist', (req, res) => {
