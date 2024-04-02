@@ -13,7 +13,6 @@ const Header = () => {
                     <li><Link to="/products">Products</Link></li> {/* Link to ProductsPage */}
                     <li><a href="#">About</a></li>
                     <li><a href="#">Contact</a></li>
-                    <li><Link to="/add-entity">Add Entity</Link></li>
                 </ul>
             </nav>
             <div className="auth">

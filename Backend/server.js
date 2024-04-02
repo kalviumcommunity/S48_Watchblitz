@@ -37,6 +37,14 @@ if (require.main === module) {
     });
 }
 
+app.post('/addWatchlist', (req, res) => {
+    const newEntity = new UserModel(req.body);
+    newEntity.save()
+        .then(entity => res.json(entity))
+        .catch(error => res.status(400).json({ error }));
+});
+
+
 module.exports = app;
 
 
