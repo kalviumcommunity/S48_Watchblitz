@@ -1,17 +1,22 @@
-// server.js
-
 require('dotenv').config();
 const express = require('express');
-const app = express();
 const mongoose = require('mongoose');
-const port = 3000;
+const cors = require('cors');
+const Joi = require('joi');
+
+const app = express();
+const port = process.env.PORT || 3000;
 const mongoURI = process.env.MONGODB_URI;
-const cors = require('cors')
-const UserModel = require('./models/Watchlists')
 
-app.use(cors())
-app.use(express.json())
+// Models
+const WatchlistsModel = require('./models/Watchlists');
+const UsersModel = require('./models/Users');
 
+// Middleware
+app.use(cors());
+app.use(express.json());
+
+// Database connection
 mongoose.connect(mongoURI, {
     useNewUrlParser: true,
     useUnifiedTopology: true
@@ -19,54 +24,121 @@ mongoose.connect(mongoURI, {
 .then(() => console.log('Connected to MongoDB'))
 .catch(err => console.error('Error connecting to MongoDB:', err));
 
-app.get("/mongo", (req,res)=>{
+// Routes
+
+// Get database connection status
+app.get("/mongo", (req, res) => {
     const connection = mongoose.connection.readyState === 1 ? "Connected" : "Disconnected";
     res.send(`Database connection status : ${connection}`)
-})
+});
 
-app.get('/getWatchlists',(req,res)=> {
-    UserModel.find()
-    .then(users => res.json(users))
-    .catch(err => res.json(err))
-})
+// Watchlists Routes
 
+// Get all watchlists
+app.get('/getWatchlists', (req, res) => {
+    WatchlistsModel.find()
+        .then(watchlists => res.json(watchlists))
+        .catch(err => res.json(err))
+});
 
-if (require.main === module) {
-    app.listen(port, () => {
-        console.log(`🚀 server running on PORT: ${port}`);
-    });
-}
+// Add a new watchlist
+const watchlistSchema = Joi.object({
+    name: Joi.string().required(),
+    brand: Joi.string().required(),
+    price: Joi.number().required(),
+    description: Joi.string().required(),
+    features: Joi.array().items(Joi.string()).required()
+});
 
 app.post('/addWatchlist', (req, res) => {
-    const newEntity = new UserModel(req.body);
-    newEntity.save()
-        .then(entity => res.json(entity))
+    const { error } = watchlistSchema.validate(req.body);
+    if (error) {
+        return res.status(400).json({ error: error.details[0].message });
+    }
+
+    const newWatchlist = new WatchlistsModel(req.body);
+    newWatchlist.save()
+        .then(watchlist => res.json(watchlist))
         .catch(error => res.status(400).json({ error }));
 });
 
-// server.js
-
-// Add this route to handle updating a product
+// Update a watchlist
 app.put('/updateWatchlist/:id', (req, res) => {
     const { id } = req.params;
     const { name, brand, price, description, features } = req.body;
-    UserModel.findByIdAndUpdate(id, { name, brand, price, description, features })
-        .then(() => res.json({ message: 'Product updated successfully' }))
+    WatchlistsModel.findByIdAndUpdate(id, { name, brand, price, description, features })
+        .then(() => res.json({ message: 'Watchlist updated successfully' }))
         .catch(error => res.status(400).json({ error }));
 });
 
-
-// Add this route to handle deleting a product
+// Delete a watchlist
 app.delete('/deleteWatchlist/:id', (req, res) => {
     const { id } = req.params;
-    UserModel.findByIdAndDelete(id)
-        .then(() => res.json({ message: 'Product deleted successfully' }))
+    WatchlistsModel.findByIdAndDelete(id)
+        .then(() => res.json({ message: 'Watchlist deleted successfully' }))
         .catch(error => res.status(400).json({ error }));
 });
 
+// Users Routes
 
+// Get all users
+app.get('/getUsers', (req, res) => {
+    UsersModel.find()
+        .then(users => res.json(users))
+        .catch(err => res.json(err))
+});
+
+// Define Joi schema for user signup data
+const userSchema = Joi.object({
+    name: Joi.string().required(),
+    email: Joi.string().email().required(),
+    username: Joi.string().required(),
+    password: Joi.string().required()
+});
+
+// Add a new user
+app.post('/addUser', (req, res) => {
+    const { error } = userSchema.validate(req.body);
+    if (error) {
+        return res.status(400).json({ error: error.details[0].message });
+    }
+
+    const newUser = new UsersModel(req.body);
+    newUser.save()
+        .then(user => res.json(user))
+        .catch(error => res.status(400).json({ error }));
+});
+
+// Define Joi schema for user login data
+const loginSchema = Joi.object({
+    username: Joi.string().required(),
+    password: Joi.string().required()
+});
+
+// User login
+app.post('/login', async (req, res) => {
+    const { error } = loginSchema.validate(req.body);
+    if (error) {
+        return res.status(400).json({ error: error.details[0].message });
+    }
+
+    
+    const data = req.body;
+
+    // Check if user exists in the database
+    const user = await UsersModel.findOne({ username: data.username, password: data.password })
+    if (!user) {
+        return res.status(401).json({ error: 'Invalid username or password' });
+    }
+    // For demonstration, let's assume successful login and return a success message
+    res.json({ message: 'Login successful' });
+});
+
+// Start server
+if (require.main === module) {
+    app.listen(port, () => {
+        console.log(`🚀 Server running on PORT: ${port}`);
+    });
+}
 
 module.exports = app;
-
-
-

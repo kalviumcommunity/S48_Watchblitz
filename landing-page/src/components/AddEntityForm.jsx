@@ -37,19 +37,19 @@ const AddEntityForm = () => {
             <form onSubmit={handleSubmit}>
                 <div className="form-group">
                     <label>Name:</label>
-                    <input type="text" name="name" value={formData.name} onChange={handleChange} required />
+                    <input type="text" name="name" value={formData.name} onChange={handleChange}  />
                 </div>
                 <div className="form-group">
                     <label>Brand:</label>
-                    <input type="text" name="brand" value={formData.brand} onChange={handleChange} required />
+                    <input type="text" name="brand" value={formData.brand} onChange={handleChange}  />
                 </div>
                 <div className="form-group">
                     <label>Price:</label>
-                    <input type="text" name="price" value={formData.price} onChange={handleChange} required />
+                    <input type="text" name="price" value={formData.price} onChange={handleChange}  />
                 </div>
                 <div className="form-group">
                     <label>Description:</label>
-                    <textarea name="description" value={formData.description} onChange={handleChange} required />
+                    <textarea name="description" value={formData.description} onChange={handleChange}  />
                 </div>
                 <div className="form-group">
                     <label>Features:</label>
@@ -62,3 +62,5 @@ const AddEntityForm = () => {
 };
 
 export default AddEntityForm;
+
+
