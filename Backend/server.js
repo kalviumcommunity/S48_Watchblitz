@@ -44,6 +44,27 @@ app.post('/addWatchlist', (req, res) => {
         .catch(error => res.status(400).json({ error }));
 });
 
+// server.js
+
+// Add this route to handle updating a product
+app.put('/updateWatchlist/:id', (req, res) => {
+    const { id } = req.params;
+    const { name, brand, price, description, features } = req.body;
+    UserModel.findByIdAndUpdate(id, { name, brand, price, description, features })
+        .then(() => res.json({ message: 'Product updated successfully' }))
+        .catch(error => res.status(400).json({ error }));
+});
+
+
+// Add this route to handle deleting a product
+app.delete('/deleteWatchlist/:id', (req, res) => {
+    const { id } = req.params;
+    UserModel.findByIdAndDelete(id)
+        .then(() => res.json({ message: 'Product deleted successfully' }))
+        .catch(error => res.status(400).json({ error }));
+});
+
+
 
 module.exports = app;
 

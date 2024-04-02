@@ -1,3 +1,5 @@
+// Products.js
+
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './Products.css'; // Import your CSS file
@@ -6,6 +8,7 @@ import AddEntityForm from './AddEntityForm'; // Import your AddEntityForm compon
 const Products = () => {
     const [products, setProducts] = useState([]);
     const [showAddForm, setShowAddForm] = useState(false);
+    const [selectedProduct, setSelectedProduct] = useState(null);
 
     useEffect(() => {
         const fetchProducts = async () => {
@@ -27,6 +30,30 @@ const Products = () => {
     const handleAddEntity = () => {
         setShowAddForm(!showAddForm);
     };
+    const handleUpdateProduct = product => {
+        setSelectedProduct(product);
+        setShowAddForm(true); // Show add form with selected product data for editing
+    };
+    
+    const handleCompleteUpdate = async updatedProductData => {
+        try {
+            const updatedProduct = await axios.put(`http://localhost:3000/updateWatchlist/${selectedProduct._id}`, updatedProductData);
+            setProducts(products.map(product => (product._id === updatedProduct.data._id ? updatedProduct.data : product)));
+            setShowAddForm(false); // Hide form after update
+            setSelectedProduct(null); // Clear selected product
+        } catch (error) {
+            console.error('Error updating product:', error);
+        }
+    };
+    
+    const handleDeleteProduct = async productId => {
+        try {
+            await axios.delete(`http://localhost:3000/deleteWatchlist/${productId}`); // Use the correct endpoint from your backend
+            setProducts(products.filter(product => product._id !== productId));
+        } catch (error) {
+            console.error('Error deleting product:', error);
+        }
+    };
 
     return (
         <div className="products-container">
@@ -39,11 +66,13 @@ const Products = () => {
                     <p className="product-price">Price: ${product.price}</p>
                     <p className="product-description">Description: {product.description}</p>
                     <p className="product-features">Features: {Array.isArray(product.features) ? product.features.join(', ') : ''}</p>
+                    <button onClick={() => handleUpdateProduct(product)}>Update</button>
+                    <button onClick={() => handleDeleteProduct(product._id)}>Delete</button>
                 </div>
             ))}
         </div>
     );
-  
 };
+
 
 export default Products;
