@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
 
-const UserSchema = new mongoose.Schema({
+const WatchlistSchema = new mongoose.Schema({
     name: String,
     brand: String,
     price : String,
@@ -8,5 +8,5 @@ const UserSchema = new mongoose.Schema({
     features: Array,
 })
 
-const UserModel = mongoose.model("watchlists", UserSchema)
-module.exports = UserModel
+const WatchlistModel = mongoose.model("watchlists", WatchlistSchema)
+module.exports = WatchlistModel
