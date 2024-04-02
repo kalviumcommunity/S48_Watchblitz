@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './Products.css'; // Import your CSS file
+import AddEntityForm from './AddEntityForm'; // Import your AddEntityForm component
 
 const Products = () => {
     const [products, setProducts] = useState([]);
-    
+    const [showAddForm, setShowAddForm] = useState(false);
+
     useEffect(() => {
         const fetchProducts = async () => {
             try {
@@ -22,8 +24,14 @@ const Products = () => {
         fetchProducts();
     }, []);
 
+    const handleAddEntity = () => {
+        setShowAddForm(!showAddForm);
+    };
+
     return (
         <div className="products-container">
+            <button onClick={handleAddEntity}>Add Entity</button>
+            {showAddForm && <AddEntityForm />}
             {products.map(product => (
                 <div key={product._id} className="product-box">
                     <p className="product-name">{product.name}</p>
@@ -35,6 +43,7 @@ const Products = () => {
             ))}
         </div>
     );
+  
 };
 
 export default Products;
