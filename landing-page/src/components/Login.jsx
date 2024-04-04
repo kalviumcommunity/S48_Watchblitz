@@ -15,6 +15,13 @@ const Login = ({ onLogin }) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
+    function setCookie(name, value, daysToExpire) {
+        let date = new Date();
+        date.setTime(date.getTime() + daysToExpire * 24 * 60 * 60 * 1000);
+        document.cookie =
+          name + '=' + value + ';expires=' + date.toUTCString() + ';path=/login';
+      }
+
     const handleSubmit = async e => {
         e.preventDefault();
         try {
@@ -22,6 +29,7 @@ const Login = ({ onLogin }) => {
             console.log('Login successful:', response.data);
             setSuccessMessage('Login successful');
             setErrorMessage('');
+            setCookie('username',response.data.username)
             // Call onLogin function to update parent component state
             onLogin();
             // Redirect to another page or perform additional actions after successful login

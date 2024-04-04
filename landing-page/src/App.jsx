@@ -20,7 +20,9 @@ const App = () => {
     // Function to handle logout
     const handleLogout = () => {
         setIsLoggedIn(false);
-    };
+         // Clear username cookie upon logout
+        document.cookie = 'username=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/login;';
+};
 
     return (
         <Router>

@@ -131,8 +131,19 @@ app.post('/login', async (req, res) => {
         return res.status(401).json({ error: 'Invalid username or password' });
     }
     // For demonstration, let's assume successful login and return a success message
-    res.json({ message: 'Login successful' });
+    res.json({ message: 'Login successful', username:data.username });
 });
+
+    // Logout route to clear the cookie
+app.post('/logout', (req, res) => {
+    // Clear username cookie upon logout
+    res.clearCookie('username', { path: '/login' }); // Specify the path where the cookie was set
+    
+    // Return a success message
+    res.json({ message: 'Logout successful' });
+});
+
+
 
 // Start server
 if (require.main === module) {
