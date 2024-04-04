@@ -1,14 +1,13 @@
+// Login.jsx
 import React, { useState } from 'react';
 import axios from 'axios';
 import './Login.css';
 
-const Login = () => {
+const Login = ({ onLogin }) => {
     const [formData, setFormData] = useState({
         username: '',
         password: ''
     });
-
-
     const [errorMessage, setErrorMessage] = useState('');
     const [successMessage, setSuccessMessage] = useState('');
 
@@ -23,6 +22,8 @@ const Login = () => {
             console.log('Login successful:', response.data);
             setSuccessMessage('Login successful');
             setErrorMessage('');
+            // Call onLogin function to update parent component state
+            onLogin();
             // Redirect to another page or perform additional actions after successful login
         } catch (error) {
             console.error('Login error:', error.response.data);

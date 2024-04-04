@@ -1,9 +1,9 @@
-// Header.js
+// Header.jsx
 import React from 'react';
 import { Link } from 'react-router-dom';
 import './Header.css';
 
-const Header = () => {
+const Header = ({ isLoggedIn, onLogout }) => {
     return (
         <header className="header">
             <div className="logo">WatchBlitz</div>
@@ -16,8 +16,15 @@ const Header = () => {
                 </ul>
             </nav>
             <div className="auth">
-                <button className="login"><Link to="/login">Login</Link></button>
-                <button className="signup"><Link to="/signup">Sign Up</Link></button>
+                {!isLoggedIn && (
+                    <>
+                        <button className="login"><Link to="/login">Login</Link></button>
+                        <button className="signup"><Link to="/signup">Sign Up</Link></button>
+                    </>
+                )}
+                {isLoggedIn && (
+                    <button className="logout" onClick={onLogout}>Logout</button>
+                )}
             </div>
         </header>
     );

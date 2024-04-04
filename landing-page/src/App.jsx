@@ -1,30 +1,44 @@
 // App.jsx
-import React from 'react';
-import Header from '../src/components/Header';
-import Hero from '../src/components/Hero';
-import Footer from '../src/components/Footer';
-import LoginPage from '../src/components/Login';
-import SignupPage from '../src/components/Signup';
-import AddEntityPage from '../src/components/AddEntityPage';
-import ProductsPage from '../src/components/Products'; // Import ProductsPage
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'; 
+import React, { useState } from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import Header from './components/Header';
+import Hero from './components/Hero';
+import Footer from './components/Footer';
+import LoginPage from './components/Login';
+import SignupPage from './components/Signup';
+import AddEntityPage from './components/AddEntityPage';
+import ProductsPage from './components/Products';
 
 const App = () => {
+    const [isLoggedIn, setIsLoggedIn] = useState(false); // State to track authentication status
+
+    // Function to handle login
+    const handleLogin = () => {
+        setIsLoggedIn(true);
+    };
+
+    // Function to handle logout
+    const handleLogout = () => {
+        setIsLoggedIn(false);
+    };
+
     return (
         <Router>
             <div>
-                <Header />
+                <Header isLoggedIn={isLoggedIn} onLogout={handleLogout} />
                 <Routes>
                     <Route path="/" element={<Hero />} />
-                    <Route path="/login" element={<LoginPage />} />
+                    <Route path="/login" element={<LoginPage onLogin={handleLogin} />} />
                     <Route path="/signup" element={<SignupPage />} />
-                    <Route path="/add-entity" element={<AddEntityPage />} />
-                    <Route path="/products" element={<ProductsPage />} /> {/* Add route for ProductsPage */}
+                    <Route path="/add-entity" element={isLoggedIn ? <AddEntityPage /> : <Navigate to="/login" />} />
+                    <Route path="/products" element={isLoggedIn ? <ProductsPage /> : <Navigate to="/login" />} />
                 </Routes>
                 <Footer />
             </div>
         </Router>
     );
 };
+
+
 
 export default App;
