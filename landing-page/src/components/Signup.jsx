@@ -1,6 +1,7 @@
+// Signup.jsx
 import React, { useState } from 'react';
 import axios from 'axios';
-import './Login.css'; // Reusing Login.css for Signup styling
+import './Login.css';
 
 const Signup = () => {
     const [formData, setFormData] = useState({
@@ -9,6 +10,8 @@ const Signup = () => {
         username: '',
         password: ''
     });
+    const [errorMessage, setErrorMessage] = useState('');
+    const [successMessage, setSuccessMessage] = useState('');
 
     const handleChange = e => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -17,17 +20,15 @@ const Signup = () => {
     const handleSubmit = async e => {
         e.preventDefault();
         try {
-            const response = await axios.post('http://localhost:3000/addUser', formData); // Adjust URL based on your backend server URL
+            const response = await axios.post('http://localhost:3000/addUser', formData);
             console.log('Signup successful:', response.data);
-            // Clear form fields after successful signup
-            setFormData({
-                name: '',
-                email: '',
-                username: '',
-                password: ''
-            });
+            setSuccessMessage('Signup successful');
+            setErrorMessage('');
+            // Redirect to another page or perform additional actions after successful signup
         } catch (error) {
             console.error('Signup error:', error.response.data);
+            setErrorMessage('Error signing up');
+            setSuccessMessage('');
         }
     };
 
@@ -54,6 +55,8 @@ const Signup = () => {
                     </div>
                     <button type="submit">Sign Up</button>
                 </form>
+                {errorMessage && <p className="error-message">{errorMessage}</p>}
+                {successMessage && <p className="success-message">{successMessage}</p>}
             </div>
         </div>
     );
