@@ -31,14 +31,14 @@ nav ul li a {
 }
 
 nav ul li a:hover {
-    color: #f1c40f;
+    color: #eddd88;
 }
 
 .auth button {
     margin-left: 20px;
     padding: 10px 20px;
     border: none;
-    background-color: #f1c40f;
+    background-color: #675f3e;
     color: #191919;
     font-weight: bold;
     cursor: pointer;
@@ -46,5 +46,11 @@ nav ul li a:hover {
 }
 
 .auth button:hover {
-    background-color: #e2b607;
+    background-color: #967d0a;
+}
+
+.login,.signup{
+    
+    color: #191919;
+
 }
