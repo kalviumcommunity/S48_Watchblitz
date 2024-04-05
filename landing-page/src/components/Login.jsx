@@ -22,6 +22,8 @@ const Login = ({ onLogin }) => {
             console.log('Login successful:', response.data);
             // Set cookie
             document.cookie = `username=${formData.username}`;
+            document.cookie = `accesstoken=${response.data.token}`;
+
             setSuccessMessage('Login successful');
             setErrorMessage('');
             // Call onLogin function to update parent component state
