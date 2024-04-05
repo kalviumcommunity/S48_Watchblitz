@@ -3,7 +3,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const Joi = require('joi');
-
+const jwt = require('jsonwebtoken')
 const app = express();
 const port = process.env.PORT || 3000;
 const mongoURI = process.env.MONGODB_URI;
@@ -117,22 +117,32 @@ const loginSchema = Joi.object({
 
 // User login
 app.post('/login', async (req, res) => {
-    const { error } = loginSchema.validate(req.body);
-    if (error) {
-        return res.status(400).json({ error: error.details[0].message });
-    }
-
-    
-    const data = req.body;
-
-    // Check if user exists in the database
-    const user = await UsersModel.findOne({ username: data.username, password: data.password })
-    if (!user) {
-        return res.status(401).json({ error: 'Invalid username or password' });
-    }
-    // For demonstration, let's assume successful login and return a success message
-    res.json({ message: 'Login successful' });
+  const { error } = loginSchema.validate(req.body);
+  if (error) {
+      return res.status(400).json({ error: error.details[0].message });
+  }
+  const data = req.body;
+  const accesstoken = jwt.sign(data.username, process.env.JWT_SECRET)
+  
+  // Check if user exists in the database
+  const user = await UsersModel.findOne({ username: data.username, password: data.password })
+  if (!user) {
+      return res.status(401).json({ error: 'Invalid username or password' });
+  }
+  
+  // For demonstration, let's assume successful login and return a success message
+  res.cookie('username', data.username); // Set cookie
+  res.json({ message: 'Login successful', token: accesstoken });
 });
+
+// User logout
+app.post('/logout', (req, res) => {
+  // Clear the username cookie by setting its expiration to a past date
+  res.cookie('username', '', { expires: new Date(0) });
+  // Send a response indicating successful logout
+  res.json({ message: 'Logout successful' });
+});
+
 
 // Start server
 if (require.main === module) {

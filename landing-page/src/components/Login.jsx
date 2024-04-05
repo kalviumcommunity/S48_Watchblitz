@@ -20,6 +20,10 @@ const Login = ({ onLogin }) => {
         try {
             const response = await axios.post('http://localhost:3000/login', formData);
             console.log('Login successful:', response.data);
+            // Set cookie
+            document.cookie = `username=${formData.username}`;
+            document.cookie = `accesstoken=${response.data.token}`;
+
             setSuccessMessage('Login successful');
             setErrorMessage('');
             // Call onLogin function to update parent component state
@@ -32,6 +36,25 @@ const Login = ({ onLogin }) => {
         }
     };
 
+    const handleLogout = async () => {
+        try {
+            // Send a request to the server to logout
+            await axios.post('http://localhost:3000/logout');
+            // Clear the username cookie locally
+            // Call onLogout function to update parent component state
+            onLogout();
+            // Reset form data and messages
+            setFormData({ username: '', password: '' });
+            setErrorMessage('');
+            setSuccessMessage('Logout successful');
+        } catch (error) {
+            console.error('Logout error:', error);
+            setErrorMessage('Error logging out');
+            setSuccessMessage('');
+        }
+    };
+    
+    
     return (
         <div className="hero">
             <div className="login-container">
