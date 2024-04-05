@@ -1,4 +1,3 @@
-// Signup.jsx
 import React, { useState } from 'react';
 import axios from 'axios';
 import './Login.css';
@@ -61,7 +60,5 @@ const Signup = () => {
         </div>
     );
 };
-
-
 
 export default Signup;
