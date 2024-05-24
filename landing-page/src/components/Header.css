@@ -48,3 +48,39 @@ nav ul li a:hover {
 .auth button:hover {
     background-color: #e2b607;
 }
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    background-color: #062443;
+}
+
+.logo {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+nav ul {
+    list-style: none;
+    display: flex;
+    gap: 15px;
+}
+
+nav ul li {
+    display: inline;
+}
+
+.auth {
+    display: flex;
+    gap: 10px;
+}
+
+.user-filter {
+    margin-left: 20px;
+}
+
+#user-select {
+    padding: 5px;
+}

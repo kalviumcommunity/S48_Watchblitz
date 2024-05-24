@@ -1,7 +1,9 @@
+// Products.js
+
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import './Products.css';
-import AddEntityForm from './AddEntityForm';
+import './Products.css'; // Import your CSS file
+import AddEntityForm from './AddEntityForm'; // Import your AddEntityForm component
 
 const Products = () => {
     const [products, setProducts] = useState([]);
@@ -28,7 +30,6 @@ const Products = () => {
     const handleAddEntity = () => {
         setShowAddForm(!showAddForm);
     };
-
     const handleUpdateProduct = product => {
         setSelectedProduct(product);
         setShowAddForm(true); // Show add form with selected product data for editing
@@ -72,5 +73,6 @@ const Products = () => {
         </div>
     );
 };
+
 
 export default Products;
